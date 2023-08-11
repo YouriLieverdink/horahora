@@ -12,7 +12,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Dart SDK
+      - name: Setup Dart Sdk
         uses: dart-lang/setup-dart@d6a63dab3335f427404425de0fbfed4686d93c4f
         with:
           sdk: stable
@@ -21,7 +21,7 @@ jobs:
         run: dart pub global activate dart_frog_cli
 
       - name: Dartfrog build
-        run: (cd ./pkgs/hours; dart_frog build)
+        run: dart_frog build
 
       - name: Login to Docker hub
         uses: docker/login-action@v2
