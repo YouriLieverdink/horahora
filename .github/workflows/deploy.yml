@@ -12,6 +12,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@d6a63dab3335f427404425de0fbfed4686d93c4f
+        with:
+          sdk: stable
+
+      - name: Dartfrog activate
+        run: dart pub global activate dart_frog_cli
+
+      - name: Dartfrog build
+        run: dart_frog build
+
       - name: Login to Docker hub
         uses: docker/login-action@v2
         with:
@@ -25,7 +36,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: ./pkgs/hours/Dockerfile
+          file: ./pkgs/hours/build/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/automata-hours:main
           target: prod

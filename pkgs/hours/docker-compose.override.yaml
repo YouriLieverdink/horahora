@@ -1,9 +1,0 @@
-version: "3"
-
-services:
-  server:
-    build:
-      target: base
-    command: dart run --enable-vm-service ./bin/hours.dart
-    volumes:
-      - ./lib:/usr/app/pkgs/hours/lib
