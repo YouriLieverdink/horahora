@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
-const localDbUrl = 'mongodb://localhost:2701/automatons';
+const localDbUrl = 'mongodb://localhost:27017/automatons';
 
 Handler middleware(Handler handler) {
   final db = Db(Platform.environment['dbUrl'] ?? localDbUrl);
