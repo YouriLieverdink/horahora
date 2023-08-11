@@ -1,1 +1,1 @@
-void main() {}
+export './src/handler.dart';
