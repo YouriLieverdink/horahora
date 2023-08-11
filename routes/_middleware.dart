@@ -1,18 +1,22 @@
 import 'dart:io';
 
+import 'package:automatons/const.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
-const localDbUrl = 'mongodb://localhost:27017/automatons';
+Handler middleware(
+  Handler handler,
+) {
+  final dbUrl = Platform.environment['dbUrl'];
+  final db = Db(dbUrl ?? localDbUrl);
 
-Handler middleware(Handler handler) {
-  final db = Db(Platform.environment['dbUrl'] ?? localDbUrl);
+  final handler_ = handler //
+      .use(requestLogger())
+      .use(provider<Db>((_) => db));
 
   return (context) async {
-    final context_ = context.provide<Db>(() => db);
-
     await db.open();
-    final response = handler(context_);
+    final response = await handler_(context);
     await db.close();
 
     return response;

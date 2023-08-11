@@ -105,6 +105,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+  dart_frog_auth:
+    dependency: "direct main"
+    description:
+      name: dart_frog_auth
+      sha256: "580333a48e6539ca0bb94e8d704f7d53d36fc088ee644bda4bc6557f457c849c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   decimal:
     dependency: transitive
     description:
