@@ -1,36 +1,21 @@
-import 'package:automatons/models.dart';
+import 'package:automatons/repositories/user_repository.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:dart_frog_auth/dart_frog_auth.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
-Handler middleware(Handler handler) {
-  //
-  Future<User?> getUserByToken(Db db, String token) async {
-    try {
-      final id = ObjectId.parse(token);
-      final document = await db //
-          .collection('users')
-          .findOne(where.id(id));
-
-      if (document != null) {
-        return User.fromDocument(document);
-      }
-
-      return null;
-    } catch (_) {
-      return null;
-    }
-  }
-
+Handler middleware(
+  Handler handler,
+) {
   return (context) async {
     final db = context.read<Db>();
+    final userRepository = UserRepository(db: db);
 
-    final handler_ = handler.use(
-      bearerAuthentication<User>(
-        userFromToken: (token) => getUserByToken(db, token),
-      ),
+    final middleware = bearerAuthentication(
+      userFromToken: userRepository.getUserByToken,
     );
 
-    return handler_(context);
+    return handler //
+        .use(middleware)
+        .call(context);
   };
 }

@@ -10,13 +10,14 @@ Handler middleware(
   final dbUrl = Platform.environment['dbUrl'];
   final db = Db(dbUrl ?? localDbUrl);
 
-  final handler_ = handler //
-      .use(requestLogger())
-      .use(provider<Db>((_) => db));
-
   return (context) async {
     await db.open();
-    final response = await handler_(context);
+
+    final response = await handler //
+        .use(requestLogger())
+        .use(provider<Db>((_) => db))
+        .call(context);
+
     await db.close();
 
     return response;
