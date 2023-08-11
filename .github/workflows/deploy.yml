@@ -25,7 +25,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: ./packages/hours/Dockerfile
+          file: ./pkgs/hours/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/automata-hours:main
           target: prod
