@@ -39,4 +39,3 @@ jobs:
           file: ./pkgs/hours/build/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/automata-hours:main
-          target: prod
