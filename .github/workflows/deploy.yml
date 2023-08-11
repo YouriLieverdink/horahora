@@ -21,7 +21,7 @@ jobs:
         run: dart pub global activate dart_frog_cli
 
       - name: Dartfrog build
-        run: dart_frog build
+        run: (cd ./pkgs/hours; dart_frog build)
 
       - name: Login to Docker hub
         uses: docker/login-action@v2
