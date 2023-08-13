@@ -31,4 +31,20 @@ class RecordRepository {
         .map(Record.fromJson)
         .toList();
   }
+
+  Future<void> insertOne(
+    DateTime start,
+    DateTime end,
+  ) async {
+    final data = {
+      '_id': ObjectId(),
+      'start': start.toIso8601String(),
+      'end': end.toIso8601String(),
+      'userId': user.id,
+    };
+
+    await db //
+        .collection(collection)
+        .insertOne(data);
+  }
 }

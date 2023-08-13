@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:automatons/repositories/record_repository.dart';
 import 'package:dart_frog/dart_frog.dart';
+import 'package:deep_pick/deep_pick.dart';
 
 FutureOr<Response> onRequest(
   RequestContext context,
@@ -20,7 +22,24 @@ FutureOr<Response> onRequest(
 FutureOr<Response> _post(
   RequestContext context,
 ) async {
-  return Response(
-    statusCode: HttpStatus.notImplemented,
-  );
+  final records = context.read<RecordRepository>();
+  final json = await context.request.json();
+
+  // Retrieve the data.
+  try {
+    final start = pick(json, 'start').asDateTimeOrThrow();
+    final end = pick(json, 'end').asDateTimeOrThrow();
+
+    await records.insertOne(start, end);
+
+    return Response(
+      statusCode: HttpStatus.created,
+    );
+  } //
+  on PickException catch (e) {
+    return Response(
+      statusCode: HttpStatus.badRequest,
+      body: e.message,
+    );
+  }
 }
