@@ -13,12 +13,12 @@ class UserRepository {
   Future<User?> getUserByToken(
     String token,
   ) async {
-    final document = await db //
+    final data = await db //
         .collection(collection)
         .findOne(where.eq('token', token));
 
-    if (document != null) {
-      return User.fromDocument(document);
+    if (data != null) {
+      return User.fromJson(data);
     }
 
     return null;

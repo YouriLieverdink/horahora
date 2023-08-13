@@ -17,20 +17,18 @@ class RecordRepository {
     String from,
     String to,
   ) async {
-    final userId = user.id.toHexString();
-
-    final documents = await db //
+    final data = await db //
         .collection(collection)
         .find(
           where
               .gte('start', from)
               .and(where.lt('start', to))
-              .and(where.eq('userId', userId)),
+              .and(where.eq('userId', user.id)),
         )
         .toList();
 
-    return documents //
-        .map(Record.fromDocument)
+    return data //
+        .map(Record.fromJson)
         .toList();
   }
 }
