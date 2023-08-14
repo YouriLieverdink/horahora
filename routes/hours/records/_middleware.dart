@@ -1,5 +1,5 @@
 import 'package:automatons/models/user.dart';
-import 'package:automatons/repositories/record_repository.dart';
+import 'package:automatons/repositories/records.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
@@ -10,7 +10,7 @@ Handler middleware(
     final db = context.read<Db>();
     final user = context.read<User>();
 
-    final records = RecordRepository(
+    final records = Records(
       db: db,
       user: user,
     );

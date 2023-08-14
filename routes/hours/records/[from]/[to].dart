@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:automatons/repositories/record_repository.dart';
+import 'package:automatons/repositories/records.dart';
 import 'package:dart_frog/dart_frog.dart';
 
 FutureOr<Response> onRequest(
@@ -25,7 +25,7 @@ FutureOr<Response> _get(
   String from,
   String to,
 ) async {
-  final records = context.read<RecordRepository>();
+  final records = context.read<Records>();
   final data = await records.findAll(from, to);
 
   return Response.json(

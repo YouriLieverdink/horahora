@@ -4,11 +4,11 @@ import 'package:mongo_dart/mongo_dart.dart';
 
 const collection = 'hours-records';
 
-class RecordRepository {
+class Records {
   final Db db;
   final User user;
 
-  const RecordRepository({
+  const Records({
     required this.db,
     required this.user,
   });
