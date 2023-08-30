@@ -1,5 +1,5 @@
 import 'package:automatons/models/user.dart';
-import 'package:automatons/repositories/record.dart';
+import 'package:automatons/repositories/session.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
@@ -11,7 +11,7 @@ Handler middleware(
     final user = context.read<User>();
 
     return handler //
-        .use(provider((_) => RecordRepo(db: db, user: user)))
+        .use(provider((_) => SessionRepo(db: db, user: user)))
         .call(context);
   };
 }

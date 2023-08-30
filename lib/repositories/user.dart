@@ -3,10 +3,10 @@ import 'package:mongo_dart/mongo_dart.dart';
 
 const collection = 'users';
 
-class Users {
+class UserRepo {
   final Db db;
 
-  const Users({
+  const UserRepo({
     required this.db,
   });
 

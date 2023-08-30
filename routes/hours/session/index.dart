@@ -1,17 +1,16 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:automatons/repositories/record.dart';
+import 'package:automatons/models/user.dart';
+import 'package:automatons/repositories/session.dart';
 import 'package:dart_frog/dart_frog.dart';
 
 FutureOr<Response> onRequest(
   RequestContext context,
-  String from,
-  String to,
 ) async {
   switch (context.request.method) {
     case HttpMethod.get:
-      return _get(context, from, to);
+      return _get(context);
 
     default:
       return Response(
@@ -22,13 +21,14 @@ FutureOr<Response> onRequest(
 
 FutureOr<Response> _get(
   RequestContext context,
-  String from,
-  String to,
 ) async {
-  final records = context.read<RecordRepo>();
-  final data = await records.findAll(from, to);
+  final sessionRepo = context.read<SessionRepo>();
+
+  final status = await sessionRepo.findAll(limit: 1);
 
   return Response.json(
-    body: data,
+    body: status.isEmpty //
+        ? 'Off the clock'
+        : 'On the clock',
   );
 }
