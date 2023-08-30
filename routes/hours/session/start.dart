@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:automatons/models/session.dart';
 import 'package:automatons/repositories/session.dart';
 import 'package:dart_frog/dart_frog.dart';
 
