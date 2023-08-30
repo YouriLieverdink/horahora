@@ -1,3 +1,5 @@
+import 'package:automatons/providers/record_repo.dart';
+import 'package:automatons/providers/session_repo.dart';
 import 'package:automatons/repositories/user.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:dart_frog_auth/dart_frog_auth.dart';
@@ -13,6 +15,8 @@ Handler middleware(
     );
 
     return handler //
+        .use(recordRepoProvider())
+        .use(sessionRepoProvider())
         .use(middleware)
         .call(context);
   };

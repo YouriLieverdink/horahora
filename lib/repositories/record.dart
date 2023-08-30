@@ -23,7 +23,8 @@ class RecordRepo {
           where
               .gte('start', from)
               .and(where.lt('start', to))
-              .and(where.eq('userId', user.id)),
+              .and(where.eq('userId', user.id))
+              .sortBy('start', descending: true),
         )
         .toList();
 
@@ -32,7 +33,7 @@ class RecordRepo {
         .toList();
   }
 
-  Future<void> insertOne(
+  Future<Record> insertOne(
     DateTime start,
     DateTime end,
   ) async {
@@ -46,5 +47,7 @@ class RecordRepo {
     await db //
         .collection(collection)
         .insertOne(data);
+
+    return Record.fromJson(data);
   }
 }

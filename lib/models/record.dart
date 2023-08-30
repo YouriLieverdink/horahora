@@ -6,14 +6,11 @@ class Record extends Equatable {
   /// The unique identifier.
   final String id;
 
-  /// The start date and time in UTC format.
+  /// The start date and time.
   final DateTime start;
 
-  /// The end date and time in UTC format.
-  ///
-  /// This can be [null] when the clock-in/clock-out functionality has been used
-  /// and the user is currently "clocked in".
-  final DateTime? end;
+  /// The end date and time.
+  final DateTime end;
 
   /// The unique identifier of the related user.
   final String userId;
@@ -31,7 +28,7 @@ class Record extends Equatable {
     return Record(
       id: (json['_id'] as ObjectId).toHexString(),
       start: pick(json, 'start').asDateTimeOrThrow(),
-      end: pick(json, 'end').asDateTimeOrNull(),
+      end: pick(json, 'end').asDateTimeOrThrow(),
       userId: pick(json, 'userId').asStringOrThrow(),
     );
   }
@@ -54,8 +51,11 @@ class Record extends Equatable {
     return {
       '_id': id,
       'start': start.toIso8601String(),
-      'end': end?.toIso8601String(),
+      'end': end.toIso8601String(),
       'userId': userId,
+      'meta': {
+        'duration': end.difference(start).inSeconds,
+      },
     };
   }
 

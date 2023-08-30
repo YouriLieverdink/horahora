@@ -13,20 +13,41 @@ class SessionRepo {
     required this.user,
   });
 
-  Future<List<Session>> findAll({
-    required int limit,
-  }) async {
+  Future<Session?> findOne() async {
     final data = await db //
         .collection(collection)
-        .find(
-          where //
-              .eq('userId', user.id)
-              .limit(limit),
-        )
-        .toList();
+        .findOne(
+          where.eq('userId', user.id),
+        );
 
-    return data //
-        .map(Session.fromJson)
-        .toList();
+    if (data != null) {
+      return Session.fromJson(data);
+    }
+
+    return null;
+  }
+
+  Future<Session> insertOne() async {
+    final data = {
+      '_id': ObjectId(),
+      'start': DateTime.now().toIso8601String(),
+      'userId': user.id,
+    };
+
+    await db //
+        .collection(collection)
+        .insertOne(data);
+
+    return Session.fromJson(data);
+  }
+
+  Future<void> deleteOne(
+    String id,
+  ) async {
+    final id_ = ObjectId.fromHexString(id);
+
+    await db //
+        .collection(collection)
+        .deleteOne(where.id(id_));
   }
 }
