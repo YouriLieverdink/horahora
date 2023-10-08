@@ -1,3 +1,4 @@
+import 'package:automatons/providers/job_repo.dart';
 import 'package:automatons/providers/record_repo.dart';
 import 'package:automatons/providers/session_repo.dart';
 import 'package:automatons/repositories/user.dart';
@@ -15,6 +16,7 @@ Handler middleware(
     );
 
     return handler //
+        .use(jobRepoProvider())
         .use(recordRepoProvider())
         .use(sessionRepoProvider())
         .use(middleware)
