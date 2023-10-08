@@ -32,14 +32,14 @@ class JobRepo {
     }
 
     final data = await db //
-      .collection(collection)
-      .findOne(
-        where.id(
-          ObjectId.fromHexString(id),
-        ),
-      );
+        .collection(collection)
+        .findOne(
+          where.id(
+            ObjectId.fromHexString(id),
+          ),
+        );
 
-    if (data != null ) {
+    if (data != null) {
       return Job.fromJson(data);
     }
 

@@ -28,10 +28,10 @@ class SessionRepo {
     String jobId,
   ) async {
     final data = await db //
-      .collection(collection) 
-      .findOne(
-        where.eq('jobId', jobId),
-      );
+        .collection(collection)
+        .findOne(
+          where.eq('jobId', jobId),
+        );
 
     if (data != null) {
       return Session.fromJson(data);
