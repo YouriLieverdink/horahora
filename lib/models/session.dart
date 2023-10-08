@@ -9,9 +9,17 @@ class Session extends Equatable {
   /// The start date and time.
   final DateTime start;
 
+  /// The unique identifier of the related user.
+  final String userId;
+
+  /// The unique identifier of the related job.
+  final String jobId;
+
   const Session({
     required this.id,
     required this.start,
+    required this.userId,
+    required this.jobId,
   });
 
   factory Session.fromJson(
@@ -20,16 +28,22 @@ class Session extends Equatable {
     return Session(
       id: (json['_id'] as ObjectId).toHexString(),
       start: pick(json, 'start').asDateTimeOrThrow(),
+      userId: pick(json, 'userId').asStringOrThrow(),
+      jobId: pick(json, 'jobId').asStringOrThrow(),
     );
   }
 
   Session copyWith({
     String? id,
     DateTime? start,
+    String? userId,
+    String? jobId,
   }) {
     return Session(
       id: id ?? this.id,
       start: start ?? this.start,
+      userId: userId ?? this.userId,
+      jobId: jobId ?? this.jobId,
     );
   }
 
@@ -39,6 +53,8 @@ class Session extends Equatable {
     return {
       '_id': id,
       'start': start.toIso8601String(),
+      'userId': userId,
+      'jobId': jobId,
       'meta': {
         'duration': now.difference(start).inSeconds,
       },
@@ -46,5 +62,5 @@ class Session extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, start];
+  List<Object?> get props => [id, start, userId, jobId];
 }

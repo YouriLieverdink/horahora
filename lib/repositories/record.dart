@@ -36,12 +36,14 @@ class RecordRepo {
   Future<Record> insertOne(
     DateTime start,
     DateTime end,
+    String jobId,
   ) async {
     final data = {
       '_id': ObjectId(),
       'start': start.toIso8601String(),
       'end': end.toIso8601String(),
       'userId': user.id,
+      'jobId': jobId,
     };
 
     await db //

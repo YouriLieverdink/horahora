@@ -13,12 +13,25 @@ class SessionRepo {
     required this.user,
   });
 
-  Future<Session?> findOne() async {
+  Future<List<Session>> findAll() async {
     final data = await db //
         .collection(collection)
-        .findOne(
-          where.eq('userId', user.id),
-        );
+        .find()
+        .toList();
+
+    return data //
+        .map(Session.fromJson)
+        .toList();
+  }
+
+  Future<Session?> findByJob(
+    String jobId,
+  ) async {
+    final data = await db //
+      .collection(collection) 
+      .findOne(
+        where.eq('jobId', jobId),
+      );
 
     if (data != null) {
       return Session.fromJson(data);
@@ -27,11 +40,14 @@ class SessionRepo {
     return null;
   }
 
-  Future<Session> insertOne() async {
+  Future<Session> insertOne(
+    String jobId,
+  ) async {
     final data = {
       '_id': ObjectId(),
       'start': DateTime.now().toIso8601String(),
       'userId': user.id,
+      'jobId': jobId,
     };
 
     await db //
@@ -44,10 +60,12 @@ class SessionRepo {
   Future<void> deleteOne(
     String id,
   ) async {
-    final id_ = ObjectId.fromHexString(id);
-
     await db //
         .collection(collection)
-        .deleteOne(where.id(id_));
+        .deleteOne(
+          where.id(
+            ObjectId.fromHexString(id),
+          ),
+        );
   }
 }

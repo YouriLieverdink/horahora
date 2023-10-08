@@ -24,6 +24,28 @@ class JobRepo {
         .toList();
   }
 
+  Future<Job?> findById(
+    String id,
+  ) async {
+    if (!ObjectId.isValidHexId(id)) {
+      return null;
+    }
+
+    final data = await db //
+      .collection(collection)
+      .findOne(
+        where.id(
+          ObjectId.fromHexString(id),
+        ),
+      );
+
+    if (data != null ) {
+      return Job.fromJson(data);
+    }
+
+    return null;
+  }
+
   Future<Job> insertOne(
     String name,
   ) async {

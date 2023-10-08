@@ -25,10 +25,10 @@ FutureOr<Response> _get(
   RequestContext context,
 ) async {
   final jobRepo = context.read<JobRepo>();
-  final data = await jobRepo.findAll();
+  final jobs = await jobRepo.findAll();
 
   return Response.json(
-    body: data,
+    body: jobs,
   );
 }
 
@@ -36,21 +36,14 @@ FutureOr<Response> _post(
   RequestContext context,
 ) async {
   final jobRepo = context.read<JobRepo>();
+
   final json = await context.request.json();
+  final name = pick(json, 'name').asStringOrThrow();
 
-  try {
-    final name = pick(json, 'name').asStringOrThrow();
-    final job = await jobRepo.insertOne(name);
+  final job = await jobRepo.insertOne(name);
 
-    return Response.json(
-      statusCode: HttpStatus.created,
-      body: job,
-    );
-  } //
-  on PickException catch (e) {
-    return Response(
-      statusCode: HttpStatus.badRequest,
-      body: e.message,
-    );
-  }
+  return Response.json(
+    statusCode: HttpStatus.created,
+    body: job,
+  );
 }

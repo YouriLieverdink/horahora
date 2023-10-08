@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:automatons/repositories/job.dart';
 import 'package:automatons/repositories/record.dart';
 import 'package:automatons/repositories/session.dart';
 import 'package:dart_frog/dart_frog.dart';
+import 'package:deep_pick/deep_pick.dart';
 
 FutureOr<Response> onRequest(
   RequestContext context,
@@ -23,31 +25,37 @@ FutureOr<Response> _post(
   RequestContext context,
 ) async {
   final sessionRepo = context.read<SessionRepo>();
-  final currentSession = await sessionRepo.findOne();
+  final jobRepo = context.read<JobRepo>();
 
-  if (currentSession == null) {
-    // The user must start a session before they can stop it.
+  final json = await context.request.json();
+  final jobId = pick(json, 'jobId').asStringOrThrow();
+
+  final job = await jobRepo.findById(jobId);
+  if (job == null) {
+    return Response.json(
+      statusCode: HttpStatus.notFound,
+      body: 'Job: $jobId not found.',
+    );
+  }
+
+  final current = await sessionRepo.findByJob(jobId);
+  if (current == null) {
     return Response.json(
       statusCode: HttpStatus.conflict,
-      body: {
-        'status': 'No session found',
-        'data': null,
-      },
+      body: 'Session for job: $jobId not yet active.',
     );
   }
 
   final recordRepo = context.read<RecordRepo>();
-  final newRecord = await recordRepo.insertOne(
-    currentSession.start,
+  final record = await recordRepo.insertOne(
+    current.start,
     DateTime.now(),
+    current.jobId,
   );
 
-  await sessionRepo.deleteOne(currentSession.id);
+  await sessionRepo.deleteOne(current.id);
 
   return Response.json(
-    body: {
-      'status': 'Session stopped',
-      'data': newRecord,
-    },
+    body: record,
   );
 }

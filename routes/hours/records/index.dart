@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:automatons/repositories/job.dart';
 import 'package:automatons/repositories/record.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:deep_pick/deep_pick.dart';
@@ -22,24 +23,26 @@ FutureOr<Response> onRequest(
 FutureOr<Response> _post(
   RequestContext context,
 ) async {
-  final records = context.read<RecordRepo>();
+  final recordRepo = context.read<RecordRepo>();
+  final jobRepo = context.read<JobRepo>();
+
   final json = await context.request.json();
+  final start = pick(json, 'start').asDateTimeOrThrow();
+  final end = pick(json, 'end').asDateTimeOrThrow();
+  final jobId = pick(json, 'jobId').asStringOrThrow();
 
-  // Retrieve the data.
-  try {
-    final start = pick(json, 'start').asDateTimeOrThrow();
-    final end = pick(json, 'end').asDateTimeOrThrow();
-
-    await records.insertOne(start, end);
-
-    return Response(
-      statusCode: HttpStatus.created,
-    );
-  } //
-  on PickException catch (e) {
-    return Response(
-      statusCode: HttpStatus.badRequest,
-      body: e.message,
+  final job = await jobRepo.findById(jobId);
+  if (job == null) {
+    return Response.json(
+      statusCode: HttpStatus.notFound,
+      body: 'Job: $jobId not found.',
     );
   }
+
+  final record = await recordRepo.insertOne(start, end, jobId);
+
+  return Response.json(
+    statusCode: HttpStatus.created,
+    body: record,
+  );
 }

@@ -15,11 +15,15 @@ class Record extends Equatable {
   /// The unique identifier of the related user.
   final String userId;
 
+  /// The unique identifier of the related job.
+  final String jobId;
+
   const Record({
     required this.id,
     required this.start,
     required this.end,
     required this.userId,
+    required this.jobId,
   });
 
   factory Record.fromJson(
@@ -30,6 +34,7 @@ class Record extends Equatable {
       start: pick(json, 'start').asDateTimeOrThrow(),
       end: pick(json, 'end').asDateTimeOrThrow(),
       userId: pick(json, 'userId').asStringOrThrow(),
+      jobId: pick(json, 'jobId').asStringOrThrow(),
     );
   }
 
@@ -38,12 +43,14 @@ class Record extends Equatable {
     DateTime? start,
     DateTime? end,
     String? userId,
+    String? jobId,
   }) {
     return Record(
       id: id ?? this.id,
       start: start ?? this.start,
       end: end ?? this.end,
       userId: userId ?? this.userId,
+      jobId: jobId ?? this.jobId,
     );
   }
 
@@ -53,6 +60,7 @@ class Record extends Equatable {
       'start': start.toIso8601String(),
       'end': end.toIso8601String(),
       'userId': userId,
+      'jobId': jobId,
       'meta': {
         'duration': end.difference(start).inSeconds,
       },
@@ -60,5 +68,5 @@ class Record extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, start, end, userId];
+  List<Object?> get props => [id, start, end, userId, jobId];
 }

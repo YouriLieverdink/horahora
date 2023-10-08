@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:io';
 
@@ -28,22 +27,15 @@ FutureOr<Response> _put(
   String id,
 ) async {
   final jobRepo = context.read<JobRepo>();
+
   final json = await context.request.json();
+  final name = pick(json, 'name').asStringOrThrow();
 
-  try {
-    final name = pick(json, 'name').asStringOrThrow();
-    final job = await jobRepo.updateById(id, name);
+  final job = await jobRepo.updateById(id, name);
 
-    return Response.json(
-      body: job,
-    );
-  } //
-  on PickException catch (e) {
-    return Response(
-      statusCode: HttpStatus.badRequest,
-      body: e.message,
-    );
-  }
+  return Response.json(
+    body: job,
+  );
 }
 
 FutureOr<Response> _delete(

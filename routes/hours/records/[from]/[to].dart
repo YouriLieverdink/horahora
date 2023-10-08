@@ -25,10 +25,11 @@ FutureOr<Response> _get(
   String from,
   String to,
 ) async {
-  final records = context.read<RecordRepo>();
-  final data = await records.findAll(from, to);
+  final recordRepo = context.read<RecordRepo>();
+
+  final records = await recordRepo.findAll(from, to);
 
   return Response.json(
-    body: data,
+    body: records,
   );
 }

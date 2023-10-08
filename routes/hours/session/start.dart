@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:automatons/repositories/job.dart';
 import 'package:automatons/repositories/session.dart';
 import 'package:dart_frog/dart_frog.dart';
+import 'package:deep_pick/deep_pick.dart';
 
 FutureOr<Response> onRequest(
   RequestContext context,
@@ -22,25 +24,31 @@ FutureOr<Response> _post(
   RequestContext context,
 ) async {
   final sessionRepo = context.read<SessionRepo>();
-  final currentSession = await sessionRepo.findOne();
+  final jobRepo = context.read<JobRepo>();
 
-  if (currentSession != null) {
-    // We only allow 1 session at a time.
+  final json = await context.request.json();
+  final jobId = pick(json, 'jobId').asStringOrThrow();
+
+  final job = await jobRepo.findById(jobId);
+  if (job == null) {
     return Response.json(
-      statusCode: HttpStatus.conflict,
-      body: {
-        'status': 'Session already in progress',
-        'data': null,
-      },
+      statusCode: HttpStatus.notFound,
+      body: 'Job: $jobId not found.',
     );
   }
 
-  final newSession = await sessionRepo.insertOne();
+  final existing = await sessionRepo.findByJob(jobId);
+  if (existing != null) {
+    return Response.json(
+      statusCode: HttpStatus.conflict,
+      body: 'Session for job: $jobId already active.',
+    );
+  }
+
+  final session = await sessionRepo.insertOne(jobId);
 
   return Response.json(
-    body: {
-      'status': 'Session started',
-      'data': newSession,
-    },
+    statusCode: HttpStatus.created,
+    body: session,
   );
 }
