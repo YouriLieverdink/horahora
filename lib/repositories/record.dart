@@ -25,9 +25,8 @@ class RecordRepo {
         .sortBy('start', descending: true);
 
     if (jobId != null) {
-      selector = selector
-        .and(where.eq('jobId', jobId));
-    } 
+      selector = selector.and(where.eq('jobId', jobId));
+    }
 
     final data = await db //
         .collection(collection)

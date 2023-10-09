@@ -25,8 +25,8 @@ String totalDurationInHours(
   List<Record> records,
 ) {
   return records //
-    .map((a) => a.duration.inSeconds) 
-    .map((b) => b / 3600)
-    .fold(0.0, (prev, curr) => prev + curr)
-    .toStringAsFixed(2);
+      .map((a) => a.duration.inSeconds)
+      .map((b) => b / 3600)
+      .fold(0.0, (prev, curr) => prev + curr)
+      .toStringAsFixed(2);
 }
