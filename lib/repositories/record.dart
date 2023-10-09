@@ -16,16 +16,22 @@ class RecordRepo {
   Future<List<Record>> findAll(
     String from,
     String to,
+    String? jobId,
   ) async {
+    var selector = where
+        .gte('start', from)
+        .and(where.lt('start', to))
+        .and(where.eq('userId', user.id))
+        .sortBy('start', descending: true);
+
+    if (jobId != null) {
+      selector = selector
+        .and(where.eq('jobId', jobId));
+    } 
+
     final data = await db //
         .collection(collection)
-        .find(
-          where
-              .gte('start', from)
-              .and(where.lt('start', to))
-              .and(where.eq('userId', user.id))
-              .sortBy('start', descending: true),
-        )
+        .find(selector)
         .toList();
 
     return data //

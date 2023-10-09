@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:automatons/domain/domain.dart';
 import 'package:automatons/repositories/record.dart';
-import 'package:csv/csv.dart';
+import 'package:automatons/utilities/record.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:mailer/mailer.dart';
@@ -32,28 +32,18 @@ FutureOr<Response> _post(
   final recordRepo = context.read<RecordRepo>();
 
   final json = await context.request.json();
+  final jobId = pick(json, 'jodId').asStringOrNull();
   final from = pick(json, 'from').asStringOrThrow();
   final to = pick(json, 'to').asStringOrThrow();
   final subject = pick(json, 'subject').asStringOrThrow();
   final body = pick(json, 'body').asStringOrThrow();
 
-  final records = await recordRepo.findAll(fromDate, toDate);
+  final records = await recordRepo.findAll(fromDate, toDate, jobId);
+  final csv = recordsToCsv(records);
 
-  final List<List<dynamic>> csvData = [];
-  csvData.add(['start', 'end', 'duration']);
-  for (final rec in records) {
-    csvData.add([rec.start.toIso8601String(), rec.end.toIso8601String(), rec.duration.inSeconds / 60 / 60]);
-  }
-  final csv = const ListToCsvConverter().convert(csvData);
-
-  // We allow the user to adjust their body with some variables.
-  final durationInSeconds = records //
-    .map((record) => record.duration.inSeconds)
-    .fold(0, (prev, curr) => prev + curr);
-  final durationInHours = durationInSeconds / 60 / 60;
-
-  String html = body;
-  html = html.replaceAll('[durationInHours]', durationInHours.toStringAsFixed(2));
+  // Replace variables within export body.
+  var html = body;
+  html = html.replaceAll('[durationInHours]', totalDurationInHours(records));
 
   final message = Message()
     ..from = Address(from, 'Youri Lieverdink')

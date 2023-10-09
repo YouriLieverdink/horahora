@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:automatons/repositories/record.dart';
 import 'package:dart_frog/dart_frog.dart';
+import 'package:deep_pick/deep_pick.dart';
 
 FutureOr<Response> onRequest(
   RequestContext context,
@@ -27,7 +28,9 @@ FutureOr<Response> _get(
 ) async {
   final recordRepo = context.read<RecordRepo>();
 
-  final records = await recordRepo.findAll(from, to);
+  final jobId = pick(context.request.url.queryParameters, 'jobId').asStringOrNull();
+
+  final records = await recordRepo.findAll(from, to, jobId);
 
   return Response.json(
     body: records,
