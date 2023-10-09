@@ -15,6 +15,9 @@ class Session extends Equatable {
   /// The unique identifier of the related job.
   final String jobId;
 
+  /// The duration of this session.
+  Duration get duration => DateTime.now().difference(start);
+
   const Session({
     required this.id,
     required this.start,
@@ -48,15 +51,13 @@ class Session extends Equatable {
   }
 
   Map<String, dynamic> toJson() {
-    final now = DateTime.now();
-
     return {
       '_id': id,
       'start': start.toIso8601String(),
       'userId': userId,
       'jobId': jobId,
       'meta': {
-        'duration': now.difference(start).inSeconds,
+        'durationInSeconds': duration.inSeconds,
       },
     };
   }

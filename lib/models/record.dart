@@ -18,6 +18,9 @@ class Record extends Equatable {
   /// The unique identifier of the related job.
   final String jobId;
 
+  /// The duration of this record.
+  Duration get duration => end.difference(start);
+
   const Record({
     required this.id,
     required this.start,
@@ -62,7 +65,7 @@ class Record extends Equatable {
       'userId': userId,
       'jobId': jobId,
       'meta': {
-        'duration': end.difference(start).inSeconds,
+        'durationInSeconds': duration.inSeconds,
       },
     };
   }
