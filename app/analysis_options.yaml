@@ -3,7 +3,7 @@ include: package:lint/analysis_options.yaml
 analyzer:
   exclude:
     - build/**
-    - app/**
+    - lib/src/generated/**
 
 linter:
   rules:
