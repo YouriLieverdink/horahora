@@ -37,4 +37,4 @@ jobs:
         with:
           context: ./build
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/automatons:main
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/horahora:main
