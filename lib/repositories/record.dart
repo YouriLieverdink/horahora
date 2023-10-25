@@ -1,5 +1,5 @@
-import 'package:automatons/models/record.dart';
-import 'package:automatons/models/user.dart';
+import 'package:horahora/models/record.dart';
+import 'package:horahora/models/user.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
 const collection = 'hours-records';

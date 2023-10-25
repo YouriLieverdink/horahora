@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:automatons/config.dart';
+import 'package:horahora/config.dart';
 import 'package:mailer/smtp_server/gmail.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 

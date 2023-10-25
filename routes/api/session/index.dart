@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:automatons/repositories/session.dart';
 import 'package:dart_frog/dart_frog.dart';
+import 'package:horahora/repositories/session.dart';
 
 FutureOr<Response> onRequest(
   RequestContext context,

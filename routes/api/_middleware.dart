@@ -1,9 +1,9 @@
-import 'package:automatons/providers/job_repo.dart';
-import 'package:automatons/providers/record_repo.dart';
-import 'package:automatons/providers/session_repo.dart';
-import 'package:automatons/repositories/user.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:dart_frog_auth/dart_frog_auth.dart';
+import 'package:horahora/providers/job_repo.dart';
+import 'package:horahora/providers/record_repo.dart';
+import 'package:horahora/providers/session_repo.dart';
+import 'package:horahora/repositories/user.dart';
 
 Handler middleware(
   Handler handler,

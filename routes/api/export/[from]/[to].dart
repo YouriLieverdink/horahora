@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:automatons/domain/domain.dart';
-import 'package:automatons/repositories/record.dart';
-import 'package:automatons/utilities/record.dart';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:deep_pick/deep_pick.dart';
+import 'package:horahora/domain/domain.dart';
+import 'package:horahora/repositories/record.dart';
+import 'package:horahora/utilities/record.dart';
 import 'package:mailer/mailer.dart';
 
 FutureOr<Response> onRequest(
