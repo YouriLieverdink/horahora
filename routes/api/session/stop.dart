@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
 import 'package:deep_pick/deep_pick.dart';
+import 'package:horahora/generated/nl_iruoy_horahora_v0_json.dart' as i1;
 import 'package:horahora/repositories/job.dart';
 import 'package:horahora/repositories/record.dart';
 import 'package:horahora/repositories/session.dart';
@@ -28,29 +29,31 @@ FutureOr<Response> _post(
   final jobRepo = context.read<JobRepo>();
 
   final json = await context.request.json();
-  final jobId = pick(json, 'jobId').asStringOrThrow();
+  final form = i1.SessionForm.fromJson(json);
 
-  final job = await jobRepo.findById(jobId);
+  final job = await jobRepo.findById(form.jobId);
   if (job == null) {
     return Response.json(
       statusCode: HttpStatus.notFound,
-      body: 'Job: $jobId not found.',
+      body: 'Job: ${form.jobId} not found.',
     );
   }
 
-  final current = await sessionRepo.findByJob(jobId);
+  final current = await sessionRepo.findByJob(form.jobId);
   if (current == null) {
     return Response.json(
       statusCode: HttpStatus.conflict,
-      body: 'Session for job: $jobId not yet active.',
+      body: 'Session for job: ${form.jobId} not yet active.',
     );
   }
 
   final recordRepo = context.read<RecordRepo>();
   final record = await recordRepo.insertOne(
-    current.start,
-    DateTime.now(),
-    current.jobId,
+    i1.RecordForm(
+      start: current.start,
+      end: DateTime.now(),
+      jobId: form.jobId,
+    ),
   );
 
   await sessionRepo.deleteOne(current.id);

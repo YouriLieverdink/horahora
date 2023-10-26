@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
 import 'package:deep_pick/deep_pick.dart';
+import 'package:horahora/generated/nl_iruoy_horahora_v0_json.dart' as i1;
 import 'package:horahora/repositories/job.dart';
 import 'package:horahora/repositories/session.dart';
 
@@ -27,25 +28,25 @@ FutureOr<Response> _post(
   final jobRepo = context.read<JobRepo>();
 
   final json = await context.request.json();
-  final jobId = pick(json, 'jobId').asStringOrThrow();
+  final form = i1.SessionForm.fromJson(json);
 
-  final job = await jobRepo.findById(jobId);
+  final job = await jobRepo.findById(form.jobId);
   if (job == null) {
     return Response.json(
       statusCode: HttpStatus.notFound,
-      body: 'Job: $jobId not found.',
+      body: 'Job: ${form.jobId} not found.',
     );
   }
 
-  final existing = await sessionRepo.findByJob(jobId);
+  final existing = await sessionRepo.findByJob(form.jobId);
   if (existing != null) {
     return Response.json(
       statusCode: HttpStatus.conflict,
-      body: 'Session for job: $jobId already active.',
+      body: 'Session for job: ${form.jobId} already active.',
     );
   }
 
-  final session = await sessionRepo.insertOne(jobId);
+  final session = await sessionRepo.insertOne(form);
 
   return Response.json(
     statusCode: HttpStatus.created,

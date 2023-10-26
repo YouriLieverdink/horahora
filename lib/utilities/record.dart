@@ -1,32 +1,31 @@
 import 'package:csv/csv.dart';
-import 'package:horahora/models/record.dart';
+import 'package:horahora/generated/nl_iruoy_horahora_v0_json.dart' as i1;
 
-String recordsToCsv(
-  List<Record> records,
-) {
-  final List<List<String>> data = [
-    ['start', 'end', 'duration'],
-  ];
-
-  records //
-      .map(
-        (a) => [
-          a.start.toIso8601String(),
-          a.end.toIso8601String(),
-          (a.duration.inSeconds / 3600).toStringAsFixed(2),
-        ],
-      )
-      .forEach(data.add);
-
-  return const ListToCsvConverter().convert(data);
+extension RecordDuration on i1.Record {
+  Duration get duration => end.difference(start);
 }
 
-String totalDurationInHours(
-  List<Record> records,
-) {
-  return records //
-      .map((a) => a.duration.inSeconds)
-      .map((b) => b / 3600)
-      .fold(0.0, (prev, curr) => prev + curr)
-      .toStringAsFixed(2);
+extension RecordsTotalDuration on List<i1.Record> {
+  Duration get totalDuration {
+    return map((a) => a.duration)
+      .fold(Duration.zero, (prev, curr) => prev + curr);
+  }
+}
+
+extension RecordsCsv on List<i1.Record> {
+  String toCsv() {
+    final List<List<String>> data = [
+      ['start', 'end', 'duration'],
+    ];
+
+    map(
+      (a) => [
+        a.start.toIso8601String(),
+        a.end.toIso8601String(),
+        (a.duration.inSeconds / 3600).toStringAsFixed(2),
+      ],
+    ).forEach(data.add);
+
+    return const ListToCsvConverter().convert(data);
+  }
 }

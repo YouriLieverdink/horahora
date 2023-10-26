@@ -1,0 +1,8 @@
+---
+iruoy:
+  horahora:
+    dart_2_17_client:
+    - "./app/lib/src/generated/nl_iruoy_horahora_v0_client.dart"
+    dart_2_17_json:
+    - "./app/lib/src/generated/nl_iruoy_horahora_v0_json.dart"
+    - "./lib/src/generated/nl_iruoy_horahora_v0_json.dart"

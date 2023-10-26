@@ -1,0 +1,12 @@
+code:
+  iruoy:
+    horahora:
+      version: latest
+      generators:
+        - generator: dart_2_17_json
+          target: ./lib/generated/
+
+        - generator: dart_2_17_client
+          target: ./app/lib/src/generated/
+        - generator: dart_2_17_json
+          target: ./app/lib/src/generated/

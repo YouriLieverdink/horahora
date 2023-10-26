@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
 import 'package:deep_pick/deep_pick.dart';
+import 'package:horahora/generated/nl_iruoy_horahora_v0_json.dart' as i1;
 import 'package:horahora/repositories/job.dart';
 import 'package:horahora/repositories/record.dart';
 
@@ -27,19 +28,17 @@ FutureOr<Response> _post(
   final jobRepo = context.read<JobRepo>();
 
   final json = await context.request.json();
-  final start = pick(json, 'start').asDateTimeOrThrow();
-  final end = pick(json, 'end').asDateTimeOrThrow();
-  final jobId = pick(json, 'jobId').asStringOrThrow();
+  final form = i1.RecordForm.fromJson(json);
 
-  final job = await jobRepo.findById(jobId);
+  final job = await jobRepo.findById(form.jobId);
   if (job == null) {
     return Response.json(
       statusCode: HttpStatus.notFound,
-      body: 'Job: $jobId not found.',
+      body: 'Job: ${form.jobId} not found.',
     );
   }
 
-  final record = await recordRepo.insertOne(start, end, jobId);
+  final record = await recordRepo.insertOne(form);
 
   return Response.json(
     statusCode: HttpStatus.created,

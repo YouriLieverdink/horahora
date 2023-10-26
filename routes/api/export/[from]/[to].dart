@@ -39,11 +39,13 @@ FutureOr<Response> _post(
   final body = pick(json, 'body').asStringOrThrow();
 
   final records = await recordRepo.findAll(fromDate, toDate, jobId);
-  final csv = recordsToCsv(records);
 
   // Replace variables within export body.
   var html = body;
-  html = html.replaceAll('[durationInHours]', totalDurationInHours(records));
+  html = html.replaceAll(
+    '[durationInHours]',
+    (records.totalDuration.inMinutes / 3600).toStringAsFixed(2),
+  );
 
   final message = Message()
     ..from = Address(from, 'Youri Lieverdink')
@@ -52,7 +54,7 @@ FutureOr<Response> _post(
     ..html = html
     ..attachments.add(
       StringAttachment(
-        csv,
+        records.toCsv(),
         contentType: 'text/csv',
         fileName: 'export.csv',
       ),

@@ -28,8 +28,10 @@ FutureOr<Response> _get(
 ) async {
   final recordRepo = context.read<RecordRepo>();
 
-  final jobId =
-      pick(context.request.url.queryParameters, 'jobId').asStringOrNull();
+  final jobId = pick(
+    context.request.url.queryParameters,
+    'jobId',
+  ).asStringOrNull();
 
   final records = await recordRepo.findAll(from, to, jobId);
 

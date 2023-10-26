@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
 import 'package:deep_pick/deep_pick.dart';
+import 'package:horahora/generated/nl_iruoy_horahora_v0_json.dart' as i1;
 import 'package:horahora/repositories/job.dart';
 
 FutureOr<Response> onRequest(
@@ -38,9 +39,9 @@ FutureOr<Response> _post(
   final jobRepo = context.read<JobRepo>();
 
   final json = await context.request.json();
-  final name = pick(json, 'name').asStringOrThrow();
+  final form = i1.JobForm.fromJson(json);
 
-  final job = await jobRepo.insertOne(name);
+  final job = await jobRepo.insertOne(form);
 
   return Response.json(
     statusCode: HttpStatus.created,
