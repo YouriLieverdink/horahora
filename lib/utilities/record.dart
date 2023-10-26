@@ -1,18 +1,18 @@
 import 'package:csv/csv.dart';
-import 'package:horahora/generated/nl_iruoy_horahora_v0_json.dart' as i1;
+import 'package:horahora/generated/nl_iruoy_horahora_v0_json.dart';
 
-extension RecordDuration on i1.Record {
+extension RecordDuration on Record {
   Duration get duration => end.difference(start);
 }
 
-extension RecordsTotalDuration on List<i1.Record> {
+extension RecordsTotalDuration on List<Record> {
   Duration get totalDuration {
     return map((a) => a.duration)
         .fold(Duration.zero, (prev, curr) => prev + curr);
   }
 }
 
-extension RecordsCsv on List<i1.Record> {
+extension RecordsCsv on List<Record> {
   String toCsv() {
     final List<List<String>> data = [
       ['start', 'end', 'duration'],

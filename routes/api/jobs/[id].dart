@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
-import 'package:horahora/generated/nl_iruoy_horahora_v0_json.dart' as i1;
+import 'package:horahora/generated/nl_iruoy_horahora_v0_json.dart';
 import 'package:horahora/repositories/job.dart';
 
 FutureOr<Response> onRequest(
@@ -29,7 +29,7 @@ FutureOr<Response> _put(
   final jobRepo = context.read<JobRepo>();
 
   final json = await context.request.json();
-  final form = i1.JobForm.fromJson(json);
+  final form = JobForm.fromJson(json);
 
   final job = await jobRepo.updateById(id, form);
 

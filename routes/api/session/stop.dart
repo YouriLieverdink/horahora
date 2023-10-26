@@ -2,8 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
-import 'package:deep_pick/deep_pick.dart';
-import 'package:horahora/generated/nl_iruoy_horahora_v0_json.dart' as i1;
+import 'package:horahora/generated/nl_iruoy_horahora_v0_json.dart';
 import 'package:horahora/repositories/job.dart';
 import 'package:horahora/repositories/record.dart';
 import 'package:horahora/repositories/session.dart';
@@ -29,7 +28,7 @@ FutureOr<Response> _post(
   final jobRepo = context.read<JobRepo>();
 
   final json = await context.request.json();
-  final form = i1.SessionForm.fromJson(json);
+  final form = SessionForm.fromJson(json);
 
   final job = await jobRepo.findById(form.jobId);
   if (job == null) {
@@ -49,7 +48,7 @@ FutureOr<Response> _post(
 
   final recordRepo = context.read<RecordRepo>();
   final record = await recordRepo.insertOne(
-    i1.RecordForm(
+    RecordForm(
       start: current.start,
       end: DateTime.now(),
       jobId: form.jobId,

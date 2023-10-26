@@ -1,20 +1,19 @@
+import 'package:horahora/generated/nl_iruoy_horahora_v0_json.dart';
 import 'package:horahora/utilities/mongo.dart';
 import 'package:mongo_dart/mongo_dart.dart';
-
-import '../generated/nl_iruoy_horahora_v0_json.dart' as i1;
 
 const collection = 'hours-jobs';
 
 class JobRepo {
   final Db db;
-  final i1.User user;
+  final User user;
 
   const JobRepo({
     required this.db,
     required this.user,
   });
 
-  Future<List<i1.Job>> findAll() async {
+  Future<List<Job>> findAll() async {
     final data = await db //
         .collection(collection)
         .find()
@@ -22,11 +21,11 @@ class JobRepo {
 
     return data //
         .map(objectIdToString)
-        .map(i1.Job.fromJson)
+        .map(Job.fromJson)
         .toList();
   }
 
-  Future<i1.Job?> findById(
+  Future<Job?> findById(
     String id,
   ) async {
     if (!ObjectId.isValidHexId(id)) {
@@ -42,14 +41,14 @@ class JobRepo {
         );
 
     if (data != null) {
-      return i1.Job.fromJson(objectIdToString(data));
+      return Job.fromJson(objectIdToString(data));
     }
 
     return null;
   }
 
-  Future<i1.Job> insertOne(
-    i1.JobForm form,
+  Future<Job> insertOne(
+    JobForm form,
   ) async {
     final data = {
       '_id': ObjectId(),
@@ -61,12 +60,12 @@ class JobRepo {
         .collection(collection)
         .insertOne(data);
 
-    return i1.Job.fromJson(objectIdToString(data));
+    return Job.fromJson(objectIdToString(data));
   }
 
-  Future<i1.Job> updateById(
+  Future<Job> updateById(
     String id,
-    i1.JobForm form,
+    JobForm form,
   ) async {
     final data = {
       'name': form.name,
@@ -81,7 +80,7 @@ class JobRepo {
           data,
         );
 
-    return i1.Job(id: id, name: form.name);
+    return Job(id: id, name: form.name);
   }
 
   Future<void> deleteById(

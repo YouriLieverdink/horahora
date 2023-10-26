@@ -1,20 +1,19 @@
+import 'package:horahora/generated/nl_iruoy_horahora_v0_json.dart';
 import 'package:horahora/utilities/mongo.dart';
 import 'package:mongo_dart/mongo_dart.dart';
-
-import '../generated/nl_iruoy_horahora_v0_json.dart' as i1;
 
 const collection = 'hours-sessions';
 
 class SessionRepo {
   final Db db;
-  final i1.User user;
+  final User user;
 
   const SessionRepo({
     required this.db,
     required this.user,
   });
 
-  Future<List<i1.Session>> findAll() async {
+  Future<List<Session>> findAll() async {
     final data = await db //
         .collection(collection)
         .find()
@@ -22,11 +21,11 @@ class SessionRepo {
 
     return data //
         .map(objectIdToString)
-        .map(i1.Session.fromJson)
+        .map(Session.fromJson)
         .toList();
   }
 
-  Future<i1.Session?> findByJob(
+  Future<Session?> findByJob(
     String jobId,
   ) async {
     final data = await db //
@@ -36,14 +35,14 @@ class SessionRepo {
         );
 
     if (data != null) {
-      return i1.Session.fromJson(objectIdToString(data));
+      return Session.fromJson(objectIdToString(data));
     }
 
     return null;
   }
 
-  Future<i1.Session> insertOne(
-    i1.SessionForm form,
+  Future<Session> insertOne(
+    SessionForm form,
   ) async {
     final data = {
       '_id': ObjectId(),
@@ -56,7 +55,7 @@ class SessionRepo {
         .collection(collection)
         .insertOne(data);
 
-    return i1.Session.fromJson(objectIdToString(data));
+    return Session.fromJson(objectIdToString(data));
   }
 
   Future<void> deleteOne(

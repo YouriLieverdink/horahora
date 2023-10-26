@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
-import 'package:horahora/generated/nl_iruoy_horahora_v0_json.dart' as i1;
+import 'package:horahora/generated/nl_iruoy_horahora_v0_json.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
 Response onRequest(
@@ -12,7 +12,7 @@ Response onRequest(
   if (!db.isConnected) {
     return Response.json(
       body: const [
-        i1.Error(
+        Error(
           code: 'database',
           message: 'Database is unavailable.',
         ),
@@ -22,7 +22,7 @@ Response onRequest(
   }
 
   return Response.json(
-    body: const i1.Healthcheck(
+    body: const Healthcheck(
       status: 'Healthy',
     ),
   );
