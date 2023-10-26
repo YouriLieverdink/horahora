@@ -8,7 +8,7 @@ extension RecordDuration on i1.Record {
 extension RecordsTotalDuration on List<i1.Record> {
   Duration get totalDuration {
     return map((a) => a.duration)
-      .fold(Duration.zero, (prev, curr) => prev + curr);
+        .fold(Duration.zero, (prev, curr) => prev + curr);
   }
 }
 
