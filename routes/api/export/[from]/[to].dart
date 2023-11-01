@@ -32,7 +32,7 @@ FutureOr<Response> _post(
   final recordRepo = context.read<RecordRepo>();
 
   final json = await context.request.json();
-  final jobId = pick(json, 'jodId').asStringOrNull();
+  final jobId = pick(json, 'jobId').asStringOrNull();
   final from = pick(json, 'from').asStringOrThrow();
   final to = pick(json, 'to').asStringOrThrow();
   final subject = pick(json, 'subject').asStringOrThrow();
