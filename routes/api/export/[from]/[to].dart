@@ -44,7 +44,7 @@ FutureOr<Response> _post(
   var html = body;
   html = html.replaceAll(
     '[durationInHours]',
-    (records.totalDuration.inMinutes / 3600).toStringAsFixed(2),
+    (records.totalDuration.inMinutes / 60).toStringAsFixed(2),
   );
 
   final message = Message()

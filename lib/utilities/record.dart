@@ -22,7 +22,7 @@ extension RecordsCsv on List<Record> {
       (a) => [
         a.start.toIso8601String(),
         a.end.toIso8601String(),
-        (a.duration.inSeconds / 3600).toStringAsFixed(2),
+        (a.duration.inMinutes / 60).toStringAsFixed(2),
       ],
     ).forEach(data.add);
 
