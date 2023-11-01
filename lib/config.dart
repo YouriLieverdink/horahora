@@ -1,6 +1,4 @@
-import 'package:dotenv/dotenv.dart';
+import 'dart:io';
 
-final env = DotEnv()..load();
-
-String get googleEmail => env['GOOGLE_EMAIL'] ?? '';
-String get googlePassword => env['GOOGLE_PASSWORD'] ?? '';
+String get googleEmail => Platform.environment['GOOGLE_EMAIL'] ?? '';
+String get googlePassword => Platform.environment['GOOGLE_PASSWORD'] ?? '';
