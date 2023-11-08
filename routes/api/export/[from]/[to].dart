@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
 import 'package:deep_pick/deep_pick.dart';
+import 'package:horahora/config.dart';
 import 'package:horahora/domain/domain.dart';
 import 'package:horahora/repositories/record.dart';
 import 'package:horahora/utilities/record.dart';
@@ -40,6 +41,9 @@ FutureOr<Response> _post(
 
   final records = await recordRepo.findAll(fromDate, toDate, jobId);
 
+  var name = pick(json, 'name').asStringOrNull();
+  name ??= appName;
+
   // Replace variables within export body.
   var html = body;
   html = html.replaceAll(
@@ -48,7 +52,7 @@ FutureOr<Response> _post(
   );
 
   final message = Message()
-    ..from = Address(from, 'Youri Lieverdink')
+    ..from = Address(from, name)
     ..recipients.add(to)
     ..subject = subject
     ..html = html
