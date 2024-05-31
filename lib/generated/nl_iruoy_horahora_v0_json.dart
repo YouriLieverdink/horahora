@@ -44,6 +44,27 @@ class Error extends _i1.Equatable {
   }
 }
 
+class Export extends _i1.Equatable {
+  const Export();
+
+  factory Export.fromJson(_i2.dynamic json) {
+    return Export();
+  }
+
+  _i2.dynamic toJson() {
+    return {};
+  }
+
+  Export copyWith() {
+    return Export();
+  }
+
+  @_i2.override
+  _i2.List<_i2.Object?> get props {
+    return [];
+  }
+}
+
 class Healthcheck extends _i1.Equatable {
   const Healthcheck({required this.status});
 

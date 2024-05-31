@@ -1,127 +1,69 @@
 {
   "$schema": "https://json.schemastore.org/apibuilder.json",
+
   "name": "horahora",
   "description": "Simple mobile application to keep track of worked hours.",
+
   "models": {
     "healthcheck": {
-      "fields": [
-        {
-          "name": "status",
-          "type": "string"
-        }
-      ]
+      "fields": [{ "name": "status", "type": "string" }]
     },
+
     "error": {
       "fields": [
-        {
-          "name": "code",
-          "type": "string"
-        },
-        {
-          "name": "message",
-          "type": "string"
-        }
+        { "name": "code", "type": "string" },
+        { "name": "message", "type": "string" }
       ]
     },
+
     "job": {
       "fields": [
-        {
-          "name": "_id",
-          "type": "string"
-        },
-        {
-          "name": "name",
-          "type": "string"
-        }
+        { "name": "_id", "type": "string" },
+        { "name": "name", "type": "string" }
       ]
     },
     "job_form": {
-      "fields": [
-        {
-          "name": "name",
-          "type": "string"
-        }
-      ]
+      "fields": [{ "name": "name", "type": "string" }]
     },
+
     "record": {
       "fields": [
-        {
-          "name": "_id",
-          "type": "string"
-        },
-        {
-          "name": "start",
-          "type": "date-time-iso8601"
-        },
-        {
-          "name": "end",
-          "type": "date-time-iso8601"
-        },
-        {
-          "name": "userId",
-          "type": "string"
-        },
-        {
-          "name": "jobId",
-          "type": "string"
-        }
+        { "name": "_id", "type": "string" },
+        { "name": "start", "type": "date-time-iso8601" },
+        { "name": "end", "type": "date-time-iso8601" },
+        { "name": "userId", "type": "string" },
+        { "name": "jobId", "type": "string" }
       ]
     },
     "record_form": {
       "fields": [
-        {
-          "name": "start",
-          "type": "date-time-iso8601"
-        },
-        {
-          "name": "end",
-          "type": "date-time-iso8601"
-        },
-        {
-          "name": "jobId",
-          "type": "string"
-        }
+        { "name": "start", "type": "date-time-iso8601" },
+        { "name": "end", "type": "date-time-iso8601" },
+        { "name": "jobId", "type": "string" }
       ]
     },
+
     "session": {
       "fields": [
-        {
-          "name": "_id",
-          "type": "string"
-        },
-        {
-          "name": "start",
-          "type": "date-time-iso8601"
-        },
-        {
-          "name": "userId",
-          "type": "string"
-        },
-        {
-          "name": "jobId",
-          "type": "string"
-        }
+        { "name": "_id", "type": "string" },
+        { "name": "start", "type": "date-time-iso8601" },
+        { "name": "userId", "type": "string" },
+        { "name": "jobId", "type": "string" }
       ]
     },
     "session_form": {
-      "fields": [
-        {
-          "name": "jobId",
-          "type": "string"
-        }
-      ]
+      "fields": [{ "name": "jobId", "type": "string" }]
     },
+
     "user": {
       "fields": [
-        {
-          "name": "_id",
-          "type": "string"
-        },
-        {
-          "name": "token",
-          "type": "string"
-        }
+        { "name": "_id", "type": "string" },
+        { "name": "token", "type": "string" }
       ]
+    },
+
+    "export": {
+      "fields": []
     }
   },
   "resources": {
@@ -141,8 +83,9 @@
         }
       ]
     },
+
     "job": {
-      "path": "/jobs",
+      "path": "/api/jobs",
       "operations": [
         {
           "method": "GET",
@@ -198,8 +141,9 @@
         }
       ]
     },
+
     "record": {
-      "path": "/records",
+      "path": "/api/records",
       "operations": [
         {
           "method": "GET",
@@ -233,8 +177,9 @@
         }
       ]
     },
+
     "session": {
-      "path": "/sessions",
+      "path": "/api/sessions",
       "operations": [
         {
           "method": "GET",
@@ -276,6 +221,31 @@
               "type": "[error]"
             },
             "409": {
+              "type": "[error]"
+            }
+          }
+        }
+      ]
+    },
+
+    "export": {
+      "path": "/api/exports",
+      "operations": [
+        {
+          "method": "GET",
+          "path": "/:from/:to",
+          "parameters": [
+            {
+              "name": "jobId",
+              "type": "uuid",
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "type": "string"
+            },
+            "400": {
               "type": "[error]"
             }
           }

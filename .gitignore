@@ -1,4 +1,4 @@
 .dart_frog
 .dart_tool
-build
+build/** */
 .env
