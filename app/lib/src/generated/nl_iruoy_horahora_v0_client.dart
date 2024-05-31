@@ -3,12 +3,54 @@
 /// {@endtemplate}
 library nl_iruoy_horahora_v0_client;
 
-import 'dart:convert' as _i4;
+import 'dart:convert' as _i3;
 import 'dart:core' as _i2;
 
 import 'package:http/http.dart' as _i1;
 
-import './nl_iruoy_horahora_v0_json.dart' as _i3;
+import './nl_iruoy_horahora_v0_json.dart' as _i4;
+
+class ExportResource {
+  const ExportResource({
+    required this.client,
+    required this.baseUrl,
+  });
+
+  final _i1.Client client;
+
+  final _i2.String baseUrl;
+
+  _i2.Future<_i2.String> getExportsByFromAndTo({
+    required _i2.String from,
+    required _i2.String to,
+    required _i2.String jobId,
+  }) async {
+    final query = {'jobId': jobId.toString()};
+
+    final uri = _i2.Uri.parse('$baseUrl/api/exports/$from/$to')
+        .replace(queryParameters: query);
+
+    final response = await client.get(uri);
+
+    switch (response.statusCode) {
+      case 200:
+        final json = _i3.jsonDecode(response.body);
+
+        return (json as _i2.String);
+
+      case 400:
+        final json = _i3.jsonDecode(response.body);
+
+        throw (json as _i2.List).map((v0) => _i4.Error.fromJson(v0)).toList();
+
+      default:
+        throw ClientErrorResponse(
+          status: response.statusCode,
+          body: response.body,
+        );
+    }
+  }
+}
 
 class HealthcheckResource {
   const HealthcheckResource({
@@ -20,21 +62,21 @@ class HealthcheckResource {
 
   final _i2.String baseUrl;
 
-  _i2.Future<_i3.Healthcheck> getHealthcheck() async {
+  _i2.Future<_i4.Healthcheck> getHealthcheck() async {
     final uri = _i2.Uri.parse('$baseUrl/_internal_/healthcheck');
 
     final response = await client.get(uri);
 
     switch (response.statusCode) {
       case 200:
-        final json = _i4.jsonDecode(response.body);
+        final json = _i3.jsonDecode(response.body);
 
-        return _i3.Healthcheck.fromJson(json);
+        return _i4.Healthcheck.fromJson(json);
 
       case 500:
-        final json = _i4.jsonDecode(response.body);
+        final json = _i3.jsonDecode(response.body);
 
-        throw (json as _i2.List).map((v0) => _i3.Error.fromJson(v0)).toList();
+        throw (json as _i2.List).map((v0) => _i4.Error.fromJson(v0)).toList();
 
       default:
         throw ClientErrorResponse(
@@ -55,16 +97,16 @@ class JobResource {
 
   final _i2.String baseUrl;
 
-  _i2.Future<_i2.List<_i3.Job>> get() async {
-    final uri = _i2.Uri.parse('$baseUrl/jobs');
+  _i2.Future<_i2.List<_i4.Job>> getJobs() async {
+    final uri = _i2.Uri.parse('$baseUrl/api/jobs');
 
     final response = await client.get(uri);
 
     switch (response.statusCode) {
       case 200:
-        final json = _i4.jsonDecode(response.body);
+        final json = _i3.jsonDecode(response.body);
 
-        return (json as _i2.List).map((v0) => _i3.Job.fromJson(v0)).toList();
+        return (json as _i2.List).map((v0) => _i4.Job.fromJson(v0)).toList();
 
       default:
         throw ClientErrorResponse(
@@ -74,24 +116,24 @@ class JobResource {
     }
   }
 
-  _i2.Future<_i3.Job> post(_i3.JobForm body) async {
-    final uri = _i2.Uri.parse('$baseUrl/jobs');
+  _i2.Future<_i4.Job> postJobs(_i4.JobForm body) async {
+    final uri = _i2.Uri.parse('$baseUrl/api/jobs');
 
     final response = await client.post(
       uri,
-      body: _i4.jsonEncode(body),
+      body: _i3.jsonEncode(body),
     );
 
     switch (response.statusCode) {
       case 201:
-        final json = _i4.jsonDecode(response.body);
+        final json = _i3.jsonDecode(response.body);
 
-        return _i3.Job.fromJson(json);
+        return _i4.Job.fromJson(json);
 
       case 400:
-        final json = _i4.jsonDecode(response.body);
+        final json = _i3.jsonDecode(response.body);
 
-        throw (json as _i2.List).map((v0) => _i3.Error.fromJson(v0)).toList();
+        throw (json as _i2.List).map((v0) => _i4.Error.fromJson(v0)).toList();
 
       default:
         throw ClientErrorResponse(
@@ -101,27 +143,27 @@ class JobResource {
     }
   }
 
-  _i2.Future<_i3.Job> putById(
-    _i3.JobForm body, {
+  _i2.Future<_i4.Job> putJobsById(
+    _i4.JobForm body, {
     required _i2.String id,
   }) async {
-    final uri = _i2.Uri.parse('$baseUrl/jobs/$id');
+    final uri = _i2.Uri.parse('$baseUrl/api/jobs/$id');
 
     final response = await client.put(
       uri,
-      body: _i4.jsonEncode(body),
+      body: _i3.jsonEncode(body),
     );
 
     switch (response.statusCode) {
       case 200:
-        final json = _i4.jsonDecode(response.body);
+        final json = _i3.jsonDecode(response.body);
 
-        return _i3.Job.fromJson(json);
+        return _i4.Job.fromJson(json);
 
       case 400:
-        final json = _i4.jsonDecode(response.body);
+        final json = _i3.jsonDecode(response.body);
 
-        throw (json as _i2.List).map((v0) => _i3.Error.fromJson(v0)).toList();
+        throw (json as _i2.List).map((v0) => _i4.Error.fromJson(v0)).toList();
 
       case 404:
         throw ClientErrorResponse(
@@ -137,8 +179,8 @@ class JobResource {
     }
   }
 
-  _i2.Future<void> deleteById({required _i2.String id}) async {
-    final uri = _i2.Uri.parse('$baseUrl/jobs/$id');
+  _i2.Future<void> deleteJobsById({required _i2.String id}) async {
+    final uri = _i2.Uri.parse('$baseUrl/api/jobs/$id');
 
     final response = await client.delete(uri);
 
@@ -171,23 +213,23 @@ class RecordResource {
 
   final _i2.String baseUrl;
 
-  _i2.Future<_i2.List<_i3.Record>> getByFromAndTo({
+  _i2.Future<_i2.List<_i4.Record>> getRecordsByFromAndTo({
     required _i2.String from,
     required _i2.String to,
     _i2.String? jobId,
   }) async {
     final query = {'jobId': jobId?.toString()};
 
-    final uri = _i2.Uri.parse('$baseUrl/records/$from/$to')
+    final uri = _i2.Uri.parse('$baseUrl/api/records/$from/$to')
         .replace(queryParameters: query);
 
     final response = await client.get(uri);
 
     switch (response.statusCode) {
       case 200:
-        final json = _i4.jsonDecode(response.body);
+        final json = _i3.jsonDecode(response.body);
 
-        return (json as _i2.List).map((v0) => _i3.Record.fromJson(v0)).toList();
+        return (json as _i2.List).map((v0) => _i4.Record.fromJson(v0)).toList();
 
       default:
         throw ClientErrorResponse(
@@ -197,24 +239,24 @@ class RecordResource {
     }
   }
 
-  _i2.Future<_i3.Record> post(_i3.RecordForm body) async {
-    final uri = _i2.Uri.parse('$baseUrl/records');
+  _i2.Future<_i4.Record> postRecords(_i4.RecordForm body) async {
+    final uri = _i2.Uri.parse('$baseUrl/api/records');
 
     final response = await client.post(
       uri,
-      body: _i4.jsonEncode(body),
+      body: _i3.jsonEncode(body),
     );
 
     switch (response.statusCode) {
       case 201:
-        final json = _i4.jsonDecode(response.body);
+        final json = _i3.jsonDecode(response.body);
 
-        return _i3.Record.fromJson(json);
+        return _i4.Record.fromJson(json);
 
       case 400:
-        final json = _i4.jsonDecode(response.body);
+        final json = _i3.jsonDecode(response.body);
 
-        throw (json as _i2.List).map((v0) => _i3.Error.fromJson(v0)).toList();
+        throw (json as _i2.List).map((v0) => _i4.Error.fromJson(v0)).toList();
 
       default:
         throw ClientErrorResponse(
@@ -235,17 +277,17 @@ class SessionResource {
 
   final _i2.String baseUrl;
 
-  _i2.Future<_i2.List<_i3.Session>> get() async {
-    final uri = _i2.Uri.parse('$baseUrl/sessions');
+  _i2.Future<_i2.List<_i4.Session>> getSessions() async {
+    final uri = _i2.Uri.parse('$baseUrl/api/sessions');
 
     final response = await client.get(uri);
 
     switch (response.statusCode) {
       case 200:
-        final json = _i4.jsonDecode(response.body);
+        final json = _i3.jsonDecode(response.body);
 
         return (json as _i2.List)
-            .map((v0) => _i3.Session.fromJson(v0))
+            .map((v0) => _i4.Session.fromJson(v0))
             .toList();
 
       default:
@@ -256,29 +298,29 @@ class SessionResource {
     }
   }
 
-  _i2.Future<_i3.Session> postStart(_i3.SessionForm body) async {
-    final uri = _i2.Uri.parse('$baseUrl/sessions/start');
+  _i2.Future<_i4.Session> postSessionsStart(_i4.SessionForm body) async {
+    final uri = _i2.Uri.parse('$baseUrl/api/sessions/start');
 
     final response = await client.post(
       uri,
-      body: _i4.jsonEncode(body),
+      body: _i3.jsonEncode(body),
     );
 
     switch (response.statusCode) {
       case 201:
-        final json = _i4.jsonDecode(response.body);
+        final json = _i3.jsonDecode(response.body);
 
-        return _i3.Session.fromJson(json);
+        return _i4.Session.fromJson(json);
 
       case 404:
-        final json = _i4.jsonDecode(response.body);
+        final json = _i3.jsonDecode(response.body);
 
-        throw (json as _i2.List).map((v0) => _i3.Error.fromJson(v0)).toList();
+        throw (json as _i2.List).map((v0) => _i4.Error.fromJson(v0)).toList();
 
       case 409:
-        final json = _i4.jsonDecode(response.body);
+        final json = _i3.jsonDecode(response.body);
 
-        throw (json as _i2.List).map((v0) => _i3.Error.fromJson(v0)).toList();
+        throw (json as _i2.List).map((v0) => _i4.Error.fromJson(v0)).toList();
 
       default:
         throw ClientErrorResponse(
@@ -288,29 +330,29 @@ class SessionResource {
     }
   }
 
-  _i2.Future<_i3.Session> postStop(_i3.SessionForm body) async {
-    final uri = _i2.Uri.parse('$baseUrl/sessions/stop');
+  _i2.Future<_i4.Session> postSessionsStop(_i4.SessionForm body) async {
+    final uri = _i2.Uri.parse('$baseUrl/api/sessions/stop');
 
     final response = await client.post(
       uri,
-      body: _i4.jsonEncode(body),
+      body: _i3.jsonEncode(body),
     );
 
     switch (response.statusCode) {
       case 200:
-        final json = _i4.jsonDecode(response.body);
+        final json = _i3.jsonDecode(response.body);
 
-        return _i3.Session.fromJson(json);
+        return _i4.Session.fromJson(json);
 
       case 404:
-        final json = _i4.jsonDecode(response.body);
+        final json = _i3.jsonDecode(response.body);
 
-        throw (json as _i2.List).map((v0) => _i3.Error.fromJson(v0)).toList();
+        throw (json as _i2.List).map((v0) => _i4.Error.fromJson(v0)).toList();
 
       case 409:
-        final json = _i4.jsonDecode(response.body);
+        final json = _i3.jsonDecode(response.body);
 
-        throw (json as _i2.List).map((v0) => _i3.Error.fromJson(v0)).toList();
+        throw (json as _i2.List).map((v0) => _i4.Error.fromJson(v0)).toList();
 
       default:
         throw ClientErrorResponse(
@@ -330,6 +372,13 @@ class Client {
   final _i1.Client client;
 
   final _i2.String baseUrl;
+
+  ExportResource get exports {
+    return ExportResource(
+      client: client,
+      baseUrl: baseUrl,
+    );
+  }
 
   HealthcheckResource get healthchecks {
     return HealthcheckResource(
