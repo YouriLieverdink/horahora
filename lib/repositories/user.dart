@@ -14,33 +14,19 @@ class UserRepo {
     this.uuid = const Uuid(),
   });
 
-  Future<User?> getUserById(
+  Future<User?> findUserById(
     String? id,
   ) async {
     if (id == null) {
       return null;
     }
 
-    final id_ = ObjectId.fromHexString(id);
-    final data = await db //
-        .collection(collection)
-        .findOne(where.id(id_));
-
-    if (data != null) {
-      return User.fromJson(objectIdToString(data));
-    }
-
-    return null;
-  }
-
-  Future<User?> getUserByCredentials(
-    String email,
-    String password,
-  ) async {
     final data = await db //
         .collection(collection)
         .findOne(
-          where.eq('email', email).eq('password', makeHash(password)),
+          where.id(
+            ObjectId.fromHexString(id),
+          ),
         );
 
     if (data != null) {
@@ -50,7 +36,7 @@ class UserRepo {
     return null;
   }
 
-  Future<User?> getUserByEmail(
+  Future<User?> findUserByEmail(
     String email,
   ) async {
     final data = await db //
@@ -64,14 +50,32 @@ class UserRepo {
     return null;
   }
 
-  Future<User> insertOne(
+  Future<User?> findUserByCredentials(
     String email,
-    String hashedPassword,
+    String password,
+  ) async {
+    final data = await db //
+        .collection(collection)
+        .findOne(
+          where //
+              .eq('email', email)
+              .eq('password', makeHash(password)),
+        );
+
+    if (data != null) {
+      return User.fromJson(objectIdToString(data));
+    }
+
+    return null;
+  }
+
+  Future<User> insertOne(
+    JwtForm form,
   ) async {
     final data = {
       '_id': ObjectId(),
-      'email': email,
-      'password': hashedPassword,
+      'email': form.email,
+      'password': makeHash(form.password),
     };
 
     await db //
@@ -79,5 +83,17 @@ class UserRepo {
         .insertOne(data);
 
     return User.fromJson(objectIdToString(data));
+  }
+
+  Future<void> deleteById(
+    String id,
+  ) async {
+    await db //
+        .collection(collection)
+        .deleteOne(
+          where.id(
+            ObjectId.fromHexString(id),
+          ),
+        );
   }
 }

@@ -5,7 +5,6 @@ import 'package:dart_frog/dart_frog.dart';
 import 'package:horahora/generated/nl_iruoy_horahora_v0_json.dart';
 import 'package:horahora/repositories/user.dart';
 import 'package:horahora/utilities/jwt.dart';
-import 'package:horahora/utilities/string.dart';
 
 FutureOr<Response> onRequest(
   RequestContext context,
@@ -29,7 +28,7 @@ FutureOr<Response> _post(
   final json = await context.request.json();
   final form = JwtForm.fromJson(json);
 
-  final existing = await userRepo.getUserByEmail(form.email);
+  final existing = await userRepo.findUserByEmail(form.email);
   if (existing != null) {
     return Response.json(
       statusCode: HttpStatus.conflict,
@@ -42,11 +41,7 @@ FutureOr<Response> _post(
     );
   }
 
-  final user = await userRepo.insertOne(
-    form.email,
-    makeHash(form.password),
-  );
-
+  final user = await userRepo.insertOne(form);
   final token = makeJwt(user);
 
   return Response.json(

@@ -12,7 +12,7 @@ Handler middleware(
     final userRepo = context.read<UserRepo>();
 
     final middleware = jwt(
-      getUserById: userRepo.getUserById,
+      getUserById: userRepo.findUserById,
     );
 
     return handler //

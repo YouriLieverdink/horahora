@@ -28,7 +28,7 @@ FutureOr<Response> _post(
   final json = await context.request.json();
   final form = JwtForm.fromJson(json);
 
-  final user = await userRepo.getUserByCredentials(form.email, form.password);
+  final user = await userRepo.findUserByCredentials(form.email, form.password);
   if (user == null) {
     return Response.json(
       statusCode: HttpStatus.unauthorized,
