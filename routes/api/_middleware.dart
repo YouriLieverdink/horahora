@@ -1,5 +1,5 @@
 import 'package:dart_frog/dart_frog.dart';
-import 'package:dart_frog_auth/dart_frog_auth.dart';
+import 'package:horahora/middleware/jwt.dart';
 import 'package:horahora/providers/job_repo.dart';
 import 'package:horahora/providers/record_repo.dart';
 import 'package:horahora/providers/session_repo.dart';
@@ -11,8 +11,8 @@ Handler middleware(
   return (context) async {
     final userRepo = context.read<UserRepo>();
 
-    final middleware = bearerAuthentication(
-      userFromToken: userRepo.getUserByToken,
+    final middleware = jwt(
+      getUserById: userRepo.getUserById,
     );
 
     return handler //

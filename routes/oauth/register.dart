@@ -3,8 +3,9 @@ import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
 import 'package:horahora/generated/nl_iruoy_horahora_v0_json.dart';
-import 'package:horahora/repositories/job.dart';
-import 'package:horahora/repositories/record.dart';
+import 'package:horahora/repositories/user.dart';
+import 'package:horahora/utilities/jwt.dart';
+import 'package:horahora/utilities/string.dart';
 
 FutureOr<Response> onRequest(
   RequestContext context,
@@ -23,29 +24,33 @@ FutureOr<Response> onRequest(
 FutureOr<Response> _post(
   RequestContext context,
 ) async {
-  final recordRepo = context.read<RecordRepo>();
-  final jobRepo = context.read<JobRepo>();
+  final userRepo = context.read<UserRepo>();
 
   final json = await context.request.json();
-  final form = RecordForm.fromJson(json);
+  final form = JwtForm.fromJson(json);
 
-  final job = await jobRepo.findById(form.jobId);
-  if (job == null) {
+  final existing = await userRepo.getUserByEmail(form.email);
+  if (existing != null) {
     return Response.json(
-      statusCode: HttpStatus.notFound,
+      statusCode: HttpStatus.conflict,
       body: [
         Error(
-          code: 'notFound',
-          message: 'Job: ${form.jobId} not found.',
+          code: 'conflict',
+          message: 'User: ${form.email} already exists.',
         ),
       ],
     );
   }
 
-  final record = await recordRepo.insertOne(form);
+  final user = await userRepo.insertOne(
+    form.email,
+    makeHash(form.password),
+  );
+
+  final token = makeJwt(user);
 
   return Response.json(
     statusCode: HttpStatus.created,
-    body: record,
+    body: Jwt(token: token),
   );
 }
