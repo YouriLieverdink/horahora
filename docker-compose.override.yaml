@@ -1,0 +1,9 @@
+services:
+  api:
+    build:
+      target: base
+    command: dart_frog dev
+    stdin_open: true
+    volumes:
+      - ./lib:/usr/app/lib
+      - ./routes:/usr/app/routes
