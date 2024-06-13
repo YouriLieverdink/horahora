@@ -56,4 +56,12 @@ class RecordRepo {
 
     return Record.fromJson(objectIdToString(data));
   }
+
+  Future<void> deleteAllByUser(
+    String userId,
+  ) async {
+    await db //
+        .collection(collection)
+        .deleteMany(where.eq('userId', userId));
+  }
 }

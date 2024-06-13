@@ -203,6 +203,76 @@ class JobResource {
   }
 }
 
+class JwtResource {
+  const JwtResource({
+    required this.client,
+    required this.baseUrl,
+  });
+
+  final _i1.Client client;
+
+  final _i2.String baseUrl;
+
+  _i2.Future<_i4.Jwt> postRegister(_i4.JwtForm body) async {
+    final uri = _i2.Uri.parse('$baseUrl/oauth/register');
+
+    final response = await client.post(
+      uri,
+      body: _i3.jsonEncode(body),
+    );
+
+    switch (response.statusCode) {
+      case 201:
+        final json = _i3.jsonDecode(response.body);
+
+        return _i4.Jwt.fromJson(json);
+
+      case 400:
+        final json = _i3.jsonDecode(response.body);
+
+        throw (json as _i2.List).map((v0) => _i4.Error.fromJson(v0)).toList();
+
+      case 409:
+        final json = _i3.jsonDecode(response.body);
+
+        throw (json as _i2.List).map((v0) => _i4.Error.fromJson(v0)).toList();
+
+      default:
+        throw ClientErrorResponse(
+          status: response.statusCode,
+          body: response.body,
+        );
+    }
+  }
+
+  _i2.Future<_i4.Jwt> postLogin(_i4.JwtForm body) async {
+    final uri = _i2.Uri.parse('$baseUrl/oauth/login');
+
+    final response = await client.post(
+      uri,
+      body: _i3.jsonEncode(body),
+    );
+
+    switch (response.statusCode) {
+      case 200:
+        final json = _i3.jsonDecode(response.body);
+
+        return _i4.Jwt.fromJson(json);
+
+      case 400:
+        final json = _i3.jsonDecode(response.body);
+
+        throw (json as _i2.List).map((v0) => _i4.Error.fromJson(v0)).toList();
+
+      default:
+        throw ClientErrorResponse(
+          status: response.statusCode,
+          body: response.body,
+        );
+    }
+  }
+}
+
 class RecordResource {
   const RecordResource({
     required this.client,
@@ -389,6 +459,13 @@ class Client {
 
   JobResource get jobs {
     return JobResource(
+      client: client,
+      baseUrl: baseUrl,
+    );
+  }
+
+  JwtResource get jwts {
+    return JwtResource(
       client: client,
       baseUrl: baseUrl,
     );

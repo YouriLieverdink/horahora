@@ -4,8 +4,8 @@ import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
 import 'package:deep_pick/deep_pick.dart';
+import 'package:horahora/extensions/record.dart';
 import 'package:horahora/repositories/record.dart';
-import 'package:horahora/utilities/record.dart';
 
 FutureOr<Response> onRequest(
   RequestContext context,

@@ -55,10 +55,21 @@
       "fields": [{ "name": "jobId", "type": "string" }]
     },
 
+    "jwt": {
+      "fields": [{ "name": "token", "type": "string" }]
+    },
+
+    "jwt_form": {
+      "fields": [
+        { "name": "email", "type": "string" },
+        { "name": "password", "type": "string" }
+      ]
+    },
+
     "user": {
       "fields": [
         { "name": "_id", "type": "string" },
-        { "name": "token", "type": "string" }
+        { "name": "email", "type": "string" }
       ]
     },
 
@@ -151,7 +162,7 @@
           "parameters": [
             {
               "name": "jobId",
-              "type": "string",
+              "type": "uuid",
               "required": false
             }
           ],
@@ -244,6 +255,45 @@
           "responses": {
             "200": {
               "type": "string"
+            },
+            "400": {
+              "type": "[error]"
+            }
+          }
+        }
+      ]
+    },
+
+    "jwt": {
+      "path": "/oauth",
+      "operations": [
+        {
+          "method": "POST",
+          "path": "/register",
+          "body": {
+            "type": "jwt_form"
+          },
+          "responses": {
+            "201": {
+              "type": "jwt"
+            },
+            "400": {
+              "type": "[error]"
+            },
+            "409": {
+              "type": "[error]"
+            }
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/login",
+          "body": {
+            "type": "jwt_form"
+          },
+          "responses": {
+            "200": {
+              "type": "jwt"
             },
             "400": {
               "type": "[error]"

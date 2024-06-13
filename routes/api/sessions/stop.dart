@@ -34,7 +34,12 @@ FutureOr<Response> _post(
   if (job == null) {
     return Response.json(
       statusCode: HttpStatus.notFound,
-      body: 'Job: ${form.jobId} not found.',
+      body: [
+        Error(
+          code: 'notFound',
+          message: 'Job: ${form.jobId} not found.',
+        ),
+      ],
     );
   }
 
@@ -42,7 +47,12 @@ FutureOr<Response> _post(
   if (current == null) {
     return Response.json(
       statusCode: HttpStatus.conflict,
-      body: 'Session for job: ${form.jobId} not yet active.',
+      body: [
+        Error(
+          code: 'conflict',
+          message: 'Session for job: ${form.jobId} not yet active.',
+        ),
+      ],
     );
   }
 

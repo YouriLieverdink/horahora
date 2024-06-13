@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dart_frog/dart_frog.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:horahora/domain/domain.dart';
+import 'package:horahora/generated/nl_iruoy_horahora_v0_json.dart';
 import 'package:horahora/repositories/user.dart';
 
 Handler middleware(
@@ -21,15 +22,27 @@ Handler middleware(
       await db.close();
 
       return response;
-    } on PickException catch (e) {
+    } //
+    on PickException catch (e) {
       return Response.json(
         statusCode: HttpStatus.badRequest,
-        body: e.toString(),
+        body: [
+          Error(
+            code: 'badRequest',
+            message: e.message,
+          ),
+        ],
       );
-    } catch (e) {
+    } //
+    catch (e) {
       return Response.json(
         statusCode: HttpStatus.internalServerError,
-        body: e.toString(),
+        body: [
+          const Error(
+            code: 'internalServerError',
+            message: 'Whoops!',
+          ),
+        ],
       );
     }
   };

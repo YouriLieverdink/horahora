@@ -69,4 +69,12 @@ class SessionRepo {
           ),
         );
   }
+
+  Future<void> deleteAllByUser(
+    String userId,
+  ) async {
+    await db //
+        .collection(collection)
+        .deleteMany(where.eq('userId', userId));
+  }
 }

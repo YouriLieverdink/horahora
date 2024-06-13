@@ -148,6 +148,66 @@ class JobForm extends _i1.Equatable {
   }
 }
 
+class Jwt extends _i1.Equatable {
+  const Jwt({required this.token});
+
+  factory Jwt.fromJson(_i2.dynamic json) {
+    return Jwt(token: (json['token'] as _i2.String));
+  }
+
+  final _i2.String token;
+
+  _i2.dynamic toJson() {
+    return {'token': token};
+  }
+
+  Jwt copyWith({_i2.String? token}) {
+    return Jwt(token: token ?? this.token);
+  }
+
+  @_i2.override
+  _i2.List<_i2.Object?> get props {
+    return [token];
+  }
+}
+
+class JwtForm extends _i1.Equatable {
+  const JwtForm({
+    required this.email,
+    required this.password,
+  });
+
+  factory JwtForm.fromJson(_i2.dynamic json) {
+    return JwtForm(
+      email: (json['email'] as _i2.String),
+      password: (json['password'] as _i2.String),
+    );
+  }
+
+  final _i2.String email;
+
+  final _i2.String password;
+
+  _i2.dynamic toJson() {
+    return {'email': email, 'password': password};
+  }
+
+  JwtForm copyWith({
+    _i2.String? email,
+    _i2.String? password,
+  }) {
+    return JwtForm(
+      email: email ?? this.email,
+      password: password ?? this.password,
+    );
+  }
+
+  @_i2.override
+  _i2.List<_i2.Object?> get props {
+    return [email, password];
+  }
+}
+
 class Record extends _i1.Equatable {
   const Record({
     required this.id,
@@ -336,36 +396,36 @@ class SessionForm extends _i1.Equatable {
 class User extends _i1.Equatable {
   const User({
     required this.id,
-    required this.token,
+    required this.email,
   });
 
   factory User.fromJson(_i2.dynamic json) {
     return User(
       id: (json['_id'] as _i2.String),
-      token: (json['token'] as _i2.String),
+      email: (json['email'] as _i2.String),
     );
   }
 
   final _i2.String id;
 
-  final _i2.String token;
+  final _i2.String email;
 
   _i2.dynamic toJson() {
-    return {'_id': id, 'token': token};
+    return {'_id': id, 'email': email};
   }
 
   User copyWith({
     _i2.String? id,
-    _i2.String? token,
+    _i2.String? email,
   }) {
     return User(
       id: id ?? this.id,
-      token: token ?? this.token,
+      email: email ?? this.email,
     );
   }
 
   @_i2.override
   _i2.List<_i2.Object?> get props {
-    return [id, token];
+    return [id, email];
   }
 }
