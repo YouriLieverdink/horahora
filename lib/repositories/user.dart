@@ -1,3 +1,4 @@
+import 'package:deep_pick/deep_pick.dart';
 import 'package:horahora/generated/nl_iruoy_horahora_v0_json.dart';
 import 'package:horahora/utilities/mongo.dart';
 import 'package:horahora/utilities/string.dart';
@@ -57,16 +58,20 @@ class UserRepo {
     final data = await db //
         .collection(collection)
         .findOne(
-          where //
-              .eq('email', email)
-              .eq('password', makeHash(password)),
+          where.eq('email', email),
         );
 
-    if (data != null) {
-      return User.fromJson(objectIdToString(data));
+    if (data == null) {
+      return null;
     }
 
-    return null;
+    // Verify that the passwords match
+    final hash = pick(data, 'password').asStringOrNull();
+    if (hash == null || !compareHash(password, hash)) {
+      return null;
+    }
+
+    return User.fromJson(objectIdToString(data));
   }
 
   Future<User> insertOne(
